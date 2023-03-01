@@ -1,34 +1,47 @@
 "use strict";
 
-const visa = applyForVisa(true, true, true);
+const visa = applyForVisa(
+  {
+    name: "Eugene",
+    age: 18,
+    country: "Ukraine",
+    profession: "tutor",
+  },
+  ["doc1", "doc2", "doc3"],
+  { covid: false }
+);
 console.log("Your visa status --->>", visa);
 
-function applyForVisa(isCompleted, areSubmitted, isExamined) {
-  let application = isApplicationFilled(isCompleted);
-  let documents = areDocumentsSubmitted(areSubmitted);
-  let examination = isHealthExamined(isExamined);
+function applyForVisa(applicationData, documents, examinationResult) {
+  let application = isPermittedByApplicationData(applicationData);
+  let documentAgency = isPermittedByDocumentAgency(documents);
+  let examination = isPermittedByHealth(examinationResult);
 
-  return application && documents && examination
+  return application && documentAgency && examination
     ? "Congratulations, your visa is approved"
     : "Your visa is denied";
 }
-function isApplicationFilled(isCompleted) {
-  if (isCompleted) {
+function isPermittedByApplicationData(applicationData) {
+  if (
+    (applicationData.country === "Ukraine" &&
+    applicationData.age >= 18 &&
+    applicationData.profession !== "military man")
+  ) {
     return true;
   } else {
     return false;
-  }
+  } 
 }
-function areDocumentsSubmitted(areSubmitted) {
-  if (areSubmitted) {
+function isPermittedByDocumentAgency(documents) {
+  if (documents.length >= 3) {
     return true;
   } else {
     return false;
   }
 }
 
-function isHealthExamined(isExamined) {
-  if (isExamined) {
+function isPermittedByHealth(examinationResult) {
+  if (examinationResult?.covid === false) {
     return true;
   } else {
     return false;
